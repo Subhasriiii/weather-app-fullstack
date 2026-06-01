@@ -27,6 +27,8 @@ function App() {
       if (data.message) {
         setError(data.message);
         setWeather(null);
+        setForecast([]);
+        setLoading(false);
       } else {
         setWeather(data);
         setError("");
@@ -40,6 +42,8 @@ function App() {
       console.log("FULL ERROR:", error);
       setError(error.message);
       setLoading(false);
+      setWeather(null);
+      setForecast([]);
     }
   };
 
@@ -50,7 +54,7 @@ function App() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      background: "linear-gradient(to bottom, #87CEEB, #E0F6FF)",
+      background: "linear-gradient(135deg, #74b9ff, #dfe6e9)"
     }}>
       <h1 style={{
         fontSize: "3rem",
@@ -63,6 +67,11 @@ function App() {
         placeholder="Enter city"
         value={city}
         onChange={(e) => setCity(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            getWeather();
+          }
+        }}
         style={{
           padding: "10px",
           borderRadius: "8px",
@@ -75,12 +84,16 @@ function App() {
 
       <button onClick={getWeather}
         style={{
-          padding: "10px 20px",
-          borderRadius: "8px",
+          padding: "12px 24px",
+          borderRadius: "10px",
           border: "none",
+          backgroundColor: "#2563eb",
+          color: "white",
           cursor: "pointer",
           fontSize: "16px",
+          fontWeight: "bold",
           marginTop: "10px",
+          boxShadow: "0 4px 10px rgba(37,99,235,0.3)"
         }}
       >
         🔍 Get Weather
@@ -99,10 +112,12 @@ function App() {
             padding: "20px",
             border: "1px solid #ccc",
             borderRadius: "10px",
-            width: "350px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            width: "380px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             textAlign: "center",
-            backgroundColor: "white",
+            backgroundColor: "#ffffff",
+            border: "none",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
           }}
         >
           <div style={{ textAlign: "center" }}>
@@ -113,19 +128,24 @@ function App() {
             <h2>{weather.name}</h2>
           </div>
           <p>
-            Temperature: {weather.main.temp} °C,
+            <strong>Country: </strong> {weather.sys.country}
           </p>
           <p>
-            Weather: {weather.weather[0].description}
+            <strong>Temperature: </strong> {Math.round(weather.main.temp)} °C,
+          </p>
+          <p>
+            <strong>Weather: </strong> {weather.weather[0].description}
+          </p>
+          <p>
+            <strong>Humidity: </strong> {weather.main.humidity}%
           </p>
 
           <p>
-            Humidity: {weather.main.humidity}%
+            <strong>Wind Speed: </strong> {weather.wind.speed} m/s
           </p>
-
-          <p>
-            Wind Speed: {weather.wind.speed} m/s
-          </p>
+          <p><strong>Feels Like: </strong>{Math.round(weather.main.feels_like)} °C</p>
+          <p><strong>Sunrise: </strong> {new Date(weather.sys.sunrise * 1000).toLocaleTimeString()}</p>
+          <p><strong>Sunset: </strong> {new Date(weather.sys.sunset * 1000).toLocaleTimeString()}</p>
         </div>
       )}
 
@@ -149,8 +169,13 @@ function App() {
                   margin: "10px",
                   padding: "10px",
                   borderRadius: "8px",
-                  width: "140px",
-                  backgroundColor: "white",
+                  width: "130px",
+                  fontSize: "14px",
+                  backgroundColor: "#E0F2FE",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                  border: "none",
+                  transition: "0.3s",
+                  cursor: "pointer",
                 }}
               >
                 <img
@@ -158,15 +183,16 @@ function App() {
                   alt="forecast icon"
                 />
 
-                <p>
-                  {new Date(item.dt_txt).toLocaleDateString("en-US", {
+                <p style={{ fontWeight: "bold" }}>
+                  🕒 {new Date(item.dt_txt).toLocaleString("en-US", {
                     weekday: "short",
-                    month: "numeric",
-                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
                   })}
                 </p>
 
-                <p>🌡 {item.main.temp} °C</p>
+                <p>🌡 {Math.round(item.main.temp)} °C</p>
 
                 <p>{item.weather[0].description}</p>
 
