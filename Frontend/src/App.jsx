@@ -32,7 +32,7 @@ function App() {
       } else {
         setWeather(data);
         setError("");
-        const forecastResponse = await fetch(`http://weather-app-fullstack-ljz3.onrender.com/forecast/${city}`);
+        const forecastResponse = await fetch(`https://weather-app-fullstack-ljz3.onrender.com/forecast/${city}`);
         const forecastData = await forecastResponse.json();
         setForecast(forecastData.list.slice(0, 5));
         setCity("");
