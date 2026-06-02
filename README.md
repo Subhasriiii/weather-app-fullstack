@@ -69,6 +69,21 @@ Weather_app_fullstack/
 └── README.md
 ```
 
+## Screenshots
+
+### Home Page
+
+![Home Page](./screenshots/home.png)
+
+### Weather Result
+
+![Weather-Result](./screenshots/weather-result.png)
+
+### Error Message
+
+![Error Message](./screenshots/error_message.png)
+
+
 ## Installation
 
 ### Clone the Repository
